@@ -1,0 +1,55 @@
+name: Release Demo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      fail_demo:
+        description: "Intentionally fail the release demo workflow"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  release-demo:
+    name: Release Demo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install client dependencies
+        run: npm ci --prefix client
+
+      - name: Install server dependencies
+        run: npm ci --prefix server
+
+      - name: Build frontend
+        run: npm run build --prefix client
+
+      - name: Backend health and syntax check
+        run: npm run check --prefix server
+
+      - name: Optional manual failure
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.fail_demo == 'true' }}
+        run: |
+          echo "Manual failure requested for release intelligence demo."
+          exit 1
+
+      - name: Deploy Production
+        run: echo "Demo deployment completed for $GITHUB_SHA"
