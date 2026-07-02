@@ -24,6 +24,11 @@ if (posthogKey) {
     capture_pageview: true,
     autocapture: true
   });
+  posthog.register({
+    app: 'acmeops',
+    monitored_project: 'demo-saas-app',
+    monitored_project_name: 'AcmeOps Demo SaaS'
+  });
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

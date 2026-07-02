@@ -70,18 +70,23 @@ button {
   gap: 8px;
 }
 
-.nav-list a {
+.nav-list button {
   align-items: center;
+  background: transparent;
+  border: 0;
   border-radius: 8px;
   color: #c4d0df;
+  cursor: pointer;
   display: flex;
   gap: 10px;
   padding: 11px 12px;
+  text-align: left;
   text-decoration: none;
+  width: 100%;
 }
 
-.nav-list a.active,
-.nav-list a:hover {
+.nav-list button.active,
+.nav-list button:hover {
   background: #1c334d;
   color: #ffffff;
 }

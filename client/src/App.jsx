@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as Sentry from '@sentry/react';
 import posthog from 'posthog-js';
 import {
@@ -24,6 +24,7 @@ export default function App() {
   const [activity, setActivity] = useState([]);
   const [status, setStatus] = useState('Ready for demo telemetry');
   const [loadingAction, setLoadingAction] = useState('');
+  const [activeSection, setActiveSection] = useState('overview');
 
   const cards = useMemo(() => {
     const data = metrics || {};
@@ -86,6 +87,14 @@ export default function App() {
     ].slice(0, 6));
   }
 
+  function navigateToSection(sectionId) {
+    setActiveSection(sectionId);
+    document.getElementById(sectionId)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+
   return (
     <main className="app-shell">
       <aside className="sidebar">
@@ -97,9 +106,9 @@ export default function App() {
           </div>
         </div>
         <nav className="nav-list">
-          <a className="active" href="#overview"><Activity size={18} /> Overview</a>
-          <a href="#signals"><Sparkles size={18} /> Signals</a>
-          <a href="#incidents"><AlertTriangle size={18} /> Incidents</a>
+          <button className={activeSection === 'overview' ? 'active' : ''} onClick={() => navigateToSection('overview')} type="button"><Activity size={18} /> Overview</button>
+          <button className={activeSection === 'signals' ? 'active' : ''} onClick={() => navigateToSection('signals')} type="button"><Sparkles size={18} /> Signals</button>
+          <button className={activeSection === 'incidents' ? 'active' : ''} onClick={() => navigateToSection('incidents')} type="button"><AlertTriangle size={18} /> Incidents</button>
         </nav>
       </aside>
 
